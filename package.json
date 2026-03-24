@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run db:setup && next dev",
+    "dev": "npm run db:bootstrap && next dev",
     "build": "next build --webpack",
-    "start": "npm run db:setup && next start",
+    "start": "npm run db:bootstrap && next start",
     "lint": "eslint",
-    "db:setup": "node --env-file=.env.local scripts/setup-db.mjs"
+    "db:setup": "node --env-file=.env.local scripts/setup-db.mjs --required",
+    "db:bootstrap": "node --env-file=.env.local scripts/setup-db.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

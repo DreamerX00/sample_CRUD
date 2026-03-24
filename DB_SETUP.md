@@ -10,10 +10,30 @@ Required Postgres fields:
 - `POSTGRES_USER`
 - `POSTGRES_PASSWORD`
 
-To create the app tables:
+On app startup:
+
+```bash
+npm run dev
+```
+
+or
+
+```bash
+npm start
+```
+
+The app now checks the database connection first. If Postgres is reachable, it applies the schema automatically. If Postgres is unavailable or not configured yet, startup continues and the database bootstrap is skipped.
+
+To create the app tables manually and fail fast on errors:
 
 ```bash
 npm run db:setup
 ```
 
-That command reads [`sample/.env.local`](/home/akash-singh/BASIC_CRUD/sample/.env.local) and applies [`sample/db/schema.sql`](/home/akash-singh/BASIC_CRUD/sample/db/schema.sql).
+For the non-blocking startup check used by `dev` and `start`:
+
+```bash
+npm run db:bootstrap
+```
+
+These commands read [`sample/.env.local`](/home/akash-singh/BASIC_CRUD/sample/.env.local) and apply [`sample/db/schema.sql`](/home/akash-singh/BASIC_CRUD/sample/db/schema.sql) when a connection is available.
