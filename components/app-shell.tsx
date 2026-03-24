@@ -455,7 +455,7 @@ export function AppShell() {
                         value={form.name}
                         onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
                         className="w-full rounded-2xl border border-white/10 bg-white/8 px-4 py-3 outline-none transition focus:border-orange-300"
-                        placeholder="Aarav Mehta"
+                        placeholder="Akash Singh"
                       />
                     </label>
                   ) : null}
@@ -467,7 +467,7 @@ export function AppShell() {
                       value={form.email}
                       onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
                       className="w-full rounded-2xl border border-white/10 bg-white/8 px-4 py-3 outline-none transition focus:border-sky-300"
-                      placeholder="you@dailyalign.app"
+                      placeholder="akashsingh123@gmail.com"
                     />
                   </label>
 
