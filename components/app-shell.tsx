@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AuroraOrb } from "@/components/react-bits/aurora-orb";
+import { DatePicker } from "@/components/react-bits/date-picker";
 import { FloatingPanel } from "@/components/react-bits/floating-panel";
 import { NoiseGrid } from "@/components/react-bits/noise-grid";
 import { ToastItem, ToastStack } from "@/components/react-bits/toast-stack";
@@ -216,6 +217,25 @@ export function AppShell() {
 
   const onTaskCreate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!taskForm.title.trim()) {
+      pushToast({
+        tone: "error",
+        title: "Task title is required",
+        description: "Add a short title before creating the task.",
+      });
+      return;
+    }
+
+    if (taskForm.title.trim().length < 2) {
+      pushToast({
+        tone: "error",
+        title: "Task title is too short",
+        description: "Use at least 2 characters so the task is meaningful.",
+      });
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -562,11 +582,9 @@ export function AppShell() {
 
                     <label className="block">
                       <span className="mb-2 block text-sm text-white/72">Due date</span>
-                      <input
-                        type="date"
+                      <DatePicker
                         value={taskForm.dueDate}
-                        onChange={(event) => setTaskForm((current) => ({ ...current, dueDate: event.target.value }))}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 outline-none transition focus:border-sky-300"
+                        onChange={(value) => setTaskForm((current) => ({ ...current, dueDate: value }))}
                       />
                     </label>
                   </div>

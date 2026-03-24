@@ -26,6 +26,16 @@ export const handleRouteError = (error: unknown, fallbackMessage: string) => {
     "code" in error &&
     typeof error.code === "string"
   ) {
+    if (error.code === "42501") {
+      return json(
+        {
+          error:
+            "Postgres permission denied. Grant your database user access to the schema and tables before creating tasks.",
+        },
+        { status: 500 },
+      );
+    }
+
     if (error.code === "42P01") {
       return json(
         {
@@ -53,6 +63,16 @@ export const handleRouteError = (error: unknown, fallbackMessage: string) => {
             "Postgres authentication failed. Check POSTGRES_USER, POSTGRES_PASSWORD, or DATABASE_URL.",
         },
         { status: 500 },
+      );
+    }
+
+    if (error.code === "23503") {
+      return json(
+        {
+          error:
+            "Related data is missing in the database. Try logging in again or verify that the user record exists.",
+        },
+        { status: 409 },
       );
     }
   }
