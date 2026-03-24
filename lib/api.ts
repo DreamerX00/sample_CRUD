@@ -20,6 +20,43 @@ export const handleRouteError = (error: unknown, fallbackMessage: string) => {
     return json({ error: error.message }, { status: error.status });
   }
 
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof error.code === "string"
+  ) {
+    if (error.code === "42P01") {
+      return json(
+        {
+          error:
+            "Database tables are missing. Run `npm run db:setup` to create the required schema.",
+        },
+        { status: 500 },
+      );
+    }
+
+    if (error.code === "3D000") {
+      return json(
+        {
+          error:
+            "The configured Postgres database does not exist. Check POSTGRES_DB or DATABASE_URL and create the database first.",
+        },
+        { status: 500 },
+      );
+    }
+
+    if (error.code === "28P01") {
+      return json(
+        {
+          error:
+            "Postgres authentication failed. Check POSTGRES_USER, POSTGRES_PASSWORD, or DATABASE_URL.",
+        },
+        { status: 500 },
+      );
+    }
+  }
+
   console.error(error);
   return json({ error: fallbackMessage }, { status: 500 });
 };
