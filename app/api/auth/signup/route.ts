@@ -4,6 +4,8 @@ import { hashPassword, signSessionToken } from "@/lib/auth";
 import { handleRouteError, json, parseJsonBody, setSessionCookie } from "@/lib/api";
 import { signupSchema } from "@/lib/validations";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const { name, email, password } = await parseJsonBody(

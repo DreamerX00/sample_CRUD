@@ -4,6 +4,8 @@ import { signSessionToken, verifyPassword } from "@/lib/auth";
 import { handleRouteError, json, parseJsonBody, setSessionCookie } from "@/lib/api";
 import { loginSchema } from "@/lib/validations";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await parseJsonBody(request, loginSchema, "Invalid login payload.");

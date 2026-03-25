@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { handleRouteError, json, parseJsonBody, requireSession } from "@/lib/api";
 import { taskSchema } from "@/lib/validations";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const { error, session } = requireSession(request);

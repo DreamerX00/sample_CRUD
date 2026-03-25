@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { AppError, assertUuid, handleRouteError, json, parseJsonBody, requireSession } from "@/lib/api";
 import { taskSchema } from "@/lib/validations";
 
+export const dynamic = "force-dynamic";
+
 type Context = {
   params: Promise<{
     taskId: string;
