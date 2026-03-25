@@ -543,7 +543,7 @@ export function AppShell() {
                     />
                   </label>
 
-                  <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                     <label className="block">
                       <span className="mb-2 block text-sm text-white/72">Status</span>
                       <select
@@ -580,7 +580,7 @@ export function AppShell() {
                       </select>
                     </label>
 
-                    <label className="block">
+                    <label className="block md:col-span-2 xl:col-span-1">
                       <span className="mb-2 block text-sm text-white/72">Due date</span>
                       <DatePicker
                         value={taskForm.dueDate}
