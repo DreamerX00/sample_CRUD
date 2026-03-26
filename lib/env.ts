@@ -8,16 +8,22 @@ const required = (key: string) => {
   return value;
 };
 
+const optional = (key: string) => process.env[key];
+
 const buildDatabaseUrl = () => {
   if (process.env.DATABASE_URL) {
     return process.env.DATABASE_URL;
   }
 
-  const host = required("POSTGRES_HOST");
+  const host = optional("POSTGRES_HOST");
   const port = process.env.POSTGRES_PORT ?? "5432";
-  const database = required("POSTGRES_DB");
-  const user = required("POSTGRES_USER");
-  const password = required("POSTGRES_PASSWORD");
+  const database = optional("POSTGRES_DB");
+  const user = optional("POSTGRES_USER");
+  const password = optional("POSTGRES_PASSWORD");
+
+  if (!host || !database || !user || !password) {
+    return null;
+  }
 
   return `postgres://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:${port}/${database}`;
 };
@@ -25,6 +31,18 @@ const buildDatabaseUrl = () => {
 export const env = {
   appUrl: process.env.APP_URL ?? "http://localhost:3000",
   cookieName: process.env.COOKIE_NAME ?? "daily_align_session",
-  databaseUrl: buildDatabaseUrl(),
-  jwtSecret: required("JWT_SECRET"),
+  get databaseUrl() {
+    const url = buildDatabaseUrl();
+
+    if (!url) {
+      throw new Error(
+        "Missing database configuration. Set DATABASE_URL or POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, and POSTGRES_PASSWORD.",
+      );
+    }
+
+    return url;
+  },
+  get jwtSecret() {
+    return required("JWT_SECRET");
+  },
 };

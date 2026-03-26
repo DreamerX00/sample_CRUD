@@ -5,12 +5,19 @@ declare global {
   var postgresPool: Pool | undefined;
 }
 
-export const db =
-  global.postgresPool ??
-  new Pool({
-    connectionString: env.databaseUrl,
-  });
+const getPool = () => {
+  if (!global.postgresPool) {
+    global.postgresPool = new Pool({
+      connectionString: env.databaseUrl,
+    });
+  }
 
-if (process.env.NODE_ENV !== "production") {
-  global.postgresPool = db;
-}
+  return global.postgresPool;
+};
+
+const query: Pool["query"] = ((text: unknown, values?: unknown) =>
+  getPool().query(text as never, values as never)) as Pool["query"];
+
+export const db: Pick<Pool, "query"> = {
+  query,
+};
