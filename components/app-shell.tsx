@@ -57,6 +57,21 @@ type ApiErrorPayload = {
   message?: string;
 };
 
+const parseDateValue = (value: string | null | undefined) => {
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.includes("T") ? value : `${value}T00:00:00Z`;
+  const date = new Date(normalized);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+};
+
 async function api<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
   let response: Response;
 
@@ -353,7 +368,9 @@ export function AppShell() {
   };
 
   const formatDueDate = (dueDate: string | null) => {
-    if (!dueDate) {
+    const parsedDate = parseDateValue(dueDate);
+
+    if (!parsedDate) {
       return "whenever it fits the flow";
     }
 
@@ -362,7 +379,7 @@ export function AppShell() {
       day: "numeric",
       year: "numeric",
       timeZone: "UTC",
-    }).format(new Date(`${dueDate}T00:00:00Z`));
+    }).format(parsedDate);
   };
 
   if (loading) {

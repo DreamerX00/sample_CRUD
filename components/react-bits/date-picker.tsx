@@ -8,6 +8,21 @@ const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const pad = (value: number) => value.toString().padStart(2, "0");
 
+const parseDateValue = (value: string | null | undefined) => {
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.includes("T") ? value : `${value}T00:00:00Z`;
+  const date = new Date(normalized);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+};
+
 const formatDateValue = (date: Date) =>
   `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}`;
 
@@ -65,7 +80,7 @@ export function DatePicker({
 }) {
   const [open, setOpen] = useState(false);
   const [visibleMonth, setVisibleMonth] = useState(() => {
-    const baseDate = value ? new Date(`${value}T00:00:00Z`) : new Date();
+    const baseDate = parseDateValue(value) ?? new Date();
     return monthKeyFromDate(baseDate);
   });
   const [panelStyle, setPanelStyle] = useState<{
@@ -153,13 +168,14 @@ export function DatePicker({
     };
   }, [open]);
 
-  const displayValue = value
+  const parsedSelectedDate = parseDateValue(value);
+  const displayValue = parsedSelectedDate
     ? new Intl.DateTimeFormat("en-US", {
         month: "short",
         day: "numeric",
         year: "numeric",
         timeZone: "UTC",
-      }).format(new Date(`${value}T00:00:00Z`))
+      }).format(parsedSelectedDate)
     : "Pick a date";
 
   const calendarDays = buildMonthDays(visibleMonth);
